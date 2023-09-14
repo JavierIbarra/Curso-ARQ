@@ -1,0 +1,49 @@
+DATA:
+    inicio #0A
+    filas #04
+    cols #02
+    fin 0
+    mult 0
+    largo 0
+    grises 0
+CODE:
+    multiplicar:
+        MOV B,(mult)
+        MOV A,(cols)
+        CMP A,B
+        JLE salida
+        MOV A,(largo)
+        ADD A,(filas)
+        MOV (largo),A
+        INC (mult)
+        JMP multiplicar
+    salida:
+        MOV A,(inicio)
+        ADD A,(largo)
+        ADD A,(largo)
+        ADD A,(largo)
+        MOV (fin),A
+    cantidad:
+        MOV B,(inicio)
+        MOV A,(fin)
+        CMP A,B
+        JLT termino
+        MOV A,(B)
+        INC (inicio)
+        MOV B,(inicio)
+        MOV B,(B)
+        INC (inicio)
+        CMP A,B
+        JNE nogris
+        MOV B,(inicio)
+        MOV B,(B)
+        CMP A,B
+        JNE esgris
+    nogris:
+        INC (inicio)
+        JMP cantidad
+    esgris:
+        INC (grises)
+        JMP cantidad
+    termino:
+        MOV A,(grises)

@@ -1,0 +1,22 @@
+DATA:
+    inicio #A0
+    fin #B0
+    contador 0
+    par 0
+CODE:
+    MOV B,(inicio)
+    MOV (contador),B
+    ciclo:
+        MOV B,(fin)
+        CMP B,(contador)
+        JLE termino
+        MOV B,(contador)
+        MOV B,(B)
+        INC (contador)
+        AND B,1
+        CMP B,0
+        JNE ciclo
+        INC (par)
+        JMP ciclo
+    termino:
+        MOV A,(par)

@@ -1,0 +1,126 @@
+DATA:
+    inicio #A0
+    largo #08
+    ceros 0
+    unos 0
+    listaordenada 0
+    listadigitos 0
+    contador 0
+    i 0
+    j 0
+    buscada 1
+    valoractual 0
+    agregar 0
+    temp 0
+    
+CODE:
+    malloc:
+        MOV B,(largo)
+        ADD B,(inicio)
+        INC B
+        MOV (listadigitos),B
+        MOV B,(largo)
+        ADD B,(listadigitos)
+        MOV (listaordenada),B
+    radixsort:
+        MOV B,(buscada)
+        MOV A,(128)
+        CMP A,B
+        JEQ fin
+    countingsort:
+        MOV B,(contador)
+        MOV A,(largo)
+        CMP A,B
+        JLE sumar
+    contar:
+        MOV B,(contador)
+        ADD B,(inicio)
+        MOV A,(B)
+        AND A,(buscada)
+        CMP A,(0)
+        JEQ agregarcero
+        MOV A,1
+        MOV (agregar),A
+        INC (unos)
+        JMP agregardigitos
+    agregarcero:
+        MOV A,1
+        MOV (agregar),A
+        INC (ceros)
+    agregardigitos:
+        MOV B,(listadigitos)
+        ADD B,(contador)
+        MOV A,(agregar)
+        MOV (B),A
+        INC (contador)
+        JMP countingsort
+    sumar:
+        MOV A,(ceros)
+        MOV B,(unos)
+        ADD A,B
+        MOV (unos),A
+    ordenar:
+        MOV B,(i)
+        MOV A,(largo)
+        CMP A,B
+        JLE siguiente
+        ADD B,(listadigitos) 
+        MOV B,(B)
+        MOV A,0
+        CMP A,B
+        JEQ valorcero
+
+        MOV B,(inicio)
+        ADD B,(i) 
+        MOV B,(B)
+        MOV (temp),B
+        MOV B,(listaordenada)
+        MOV A,(unos)
+        ADD B,A
+        MOV A,(temp)
+        MOV (B),A
+
+        MOV A,(unos)
+        SUB A,1
+        MOV (unos),A
+        INC (i)
+        JMP ordenar
+    valorcero:
+        MOV B,(inicio)
+        ADD B,(i) 
+        MOV B,(B)
+        MOV (temp),B
+        MOV B,(listaordenada)
+        MOV A,(ceros)
+        ADD B,A
+        MOV A,(temp)
+        MOV (B),A
+
+        MOV A,(ceros)
+        SUB A,1
+        MOV (ceros),A
+        INC (i)
+        JMP ordenar
+    siguiente:
+        MOV B,0
+        MOV (j),B
+        MOV (i),B
+        MOV (contador),B
+        MOV A,(buscada)
+        SHL (buscada),A
+    alorigen:
+        MOV A,(j)
+        MOV B,(largo)
+        CMP A,B
+        JGT radixsort
+        ADD B,(listaordenada)
+        MOV B,(B)
+        MOV (valoractual),B
+        MOV B,(inicio)
+        ADD B,A
+        MOV A,(valoractual)
+        MOV (B),A
+        INC (j)
+        JMP alorigen
+    fin:
+        MOV A,(inicio)

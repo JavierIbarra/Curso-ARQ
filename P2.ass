@@ -1,0 +1,25 @@
+DATA:
+    inicio #A0
+    largo #08
+    res 1
+CODE:
+    MOV A,(inicio)
+    MOV B,(largo)
+    ADD B,A
+    MOV (largo),B
+    ciclo:
+        MOV B,(inicio)
+        MOV A,(largo)
+        CMP A,B
+        JNE fin
+        MOV A,(B)
+        SUB B,1
+        MOV (largo),B
+        MOV B,(inicio)
+        MOV B,(B)
+        INC (inicio)
+        CMP A,B
+        JNE ciclo
+    fin:
+        MOV A,1
+        MOV (res),A
